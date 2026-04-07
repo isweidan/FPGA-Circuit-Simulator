@@ -14,9 +14,7 @@
 
 #define X_MAX 640
 #define Y_MAX 480
-#define DELAY_1_SEC 9000000
 #define OFFSET 10
-#define RESULT_MAX_LENGTH 5
 #define PLOT_TOP_X 50
 #define PLOT_TOP_Y 180
 #define PLOT_LENGTH 580
@@ -24,7 +22,6 @@
 #define PLOT_HEIGHT_BIG 270
 #define PLOT_BOT_X 50
 #define PLOT_BOT_Y 330
-#define MAG_OFFSET_Y 150
 #define POINTS_TO_PLOT 32
 #define POINTS_TO_PLOT_PARAM 10
 #define DB_FLOOR -45.0f
@@ -328,7 +325,6 @@ static int plot_is_voltage_sweep = 0;
 static int32_t plot_lin_fullscale_q  = 65536;   
 
 
-volatile char *spice_ram = (volatile char *)XPAR_AXI_BRAM_CTRL_0_S_AXI_BASEADDR + 512;
 volatile int32_t *matrix_mem = (volatile int32_t *)LU1_BRAM_BASE;
 volatile int32_t *matrix_mem2 = (volatile int32_t *)LU2_BRAM_BASE;
 
@@ -358,7 +354,7 @@ float q1616ToFloat(int32_t x);
 void floatToAscii(float f, char *buf, int bufsize);
 uint32_t read_buttons(void);
 void debounce(void);
-void receive_spice_netlist(XUartLite *UartInstance, int pre_received);
+void receive_spice_netlist(XUartLite *UartInstance);
 int32_t to_dB_q(int32_t mag_q);
 int dB_to_pixel_y_mdb(int32_t mdb);
 int lin_mag_to_pixel_y(int32_t mag_q);
@@ -854,33 +850,11 @@ void save_matrices_to_memory_at(int n, volatile int32_t *mem, int is_voltage_swe
 
 }
 
-void save_matrices_to_memory(int n)
-{
-    save_matrices_to_memory_at(n, matrix_mem, 0, 0);
-}
-
-void load_matrices_from_memory(int n)
-{
-    int idx = 0;
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++) {
-            A[i][j].re = q1616ToFloat(matrix_mem[idx++]);
-            A[i][j].im = q1616ToFloat(matrix_mem[idx++]);
-        }
-    for (int i = 0; i < n; i++) {
-        Z[i].re = q1616ToFloat(matrix_mem[idx++]);
-        Z[i].im = q1616ToFloat(matrix_mem[idx++]);
-    }
-    DBG("Matrices loaded from memory at %p\n\r", matrix_mem);
-}
-
-
-void receive_spice_netlist(XUartLite *UartInstance, int pre_received)
+void receive_spice_netlist(XUartLite *UartInstance)
 {
     int idx = 0;
     u8  c;
 
-    // (void)pre_received;
 
     
     XUartLite_ResetFifos(UartInstance);
