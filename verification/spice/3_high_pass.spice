@@ -1,0 +1,11 @@
+# header
+.ac 10K 100M 10
+.node v3
+# code
+V1 vdd 0 1.0
+C1 vdd v1 50n
+C2 v1 v2 60n
+C3 v2 v3 70n
+L1 v1 0 100u
+R1 v2 0 5
+R2 v3 0 3

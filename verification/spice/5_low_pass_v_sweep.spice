@@ -1,0 +1,12 @@
+# header
+.ac 10M
+.node v2
+.sweep V1 1 10 1
+# code
+V1 vdd 0 1.0
+C1 vdd v1 5n
+C2 v1 v2 6n
+C3 v2 v3 7n
+R1 v1 0 10
+R2 v2 0 5
+R3 v3 0 3
