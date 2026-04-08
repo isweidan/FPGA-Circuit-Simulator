@@ -7,7 +7,7 @@ The repository is organized in the following structure:
 - IP_modules: (System)Verilog files involved in our AXI-wrapped LU Decomposition and Solver IP, alongside testbenches used for system verification.
 - software: C code that runs on Microblaze soft-processor for UART input and VGA output
 - verification: testbench for system-level verification, as well as spice code samples used for final demonstration
-- ip_project: Archived project for final packaged LU Decomposition and Solver IP.
+- vivado_project: Archived project for final packaged LU Decomposition and Solver IP.
 - final_project: Archived project for entire system project used in Final Demonstration
 - docs: PDFs of final report and presentation
 
